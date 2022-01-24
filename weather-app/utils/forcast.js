@@ -7,16 +7,15 @@ const forecast = (latitude, longitude, callback) => {
         "," +
         longitude;
 
-    request({ url: url, json: true }, (error, response) => {
+    request({ url, json: true }, (error, { body }) => {
         if (error) {
             callback("Unable to connect", undefined);
-        } else if (response.body.error) {
+        } else if (body.error) {
             callback("Unable to find location", undefined);
             debugger;
         } else {
-            const { temperature, feelslike, weather_descriptions } =
-                response.body.current;
-            weather_descriptions = weather_descriptions[0];
+            const { temperature, feelslike } = body.current;
+            const weather_descriptions = body.current.weather_descriptions[0];
             callback(undefined, { temperature, feelslike, weather_descriptions });
         }
     });
